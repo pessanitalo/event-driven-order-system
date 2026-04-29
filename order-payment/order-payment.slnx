@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="order-payment.Application/order-payment.Application.csproj" Id="ce301657-b7da-45dd-bd1b-0a7abe0b69aa" />
+  <Project Path="order-payment.Domain/order-payment.Domain.csproj" Id="d91b49ce-88af-413b-942f-0f928c0ffb94" />
+  <Project Path="order-payment.Infrastructure/order-payment.Infrastructure.csproj" Id="cac3ab0a-5963-451b-9b28-a05189136f40" />
+</Solution>

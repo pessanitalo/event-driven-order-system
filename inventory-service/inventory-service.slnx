@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="inventory-service.Application/inventory-service.Application.csproj" />
+  <Project Path="inventory-service.Domain/inventory-service.Domain.csproj" />
+  <Project Path="inventory-service.Infrastructure/inventory-service.Infrastructure.csproj" />
+</Solution>

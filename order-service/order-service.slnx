@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="order-service.Api/order-service.Api.csproj" Id="0bc447c0-8f1c-487a-81bc-132dbb26dfd4" />
+  <Project Path="order-service.Application/order-service.Application.csproj" Id="769fe244-e421-49fe-8b77-ae8a403761dc" />
+  <Project Path="order-service.Domain/order-service.Domain.csproj" Id="38844906-c4ce-4cb1-87c4-3da4042699a8" />
+  <Project Path="order-service.Infrastructure/order-service.Infrastructure.csproj" Id="dff0b6eb-51c6-4dfe-af73-f451c31fa39c" />
+</Solution>
