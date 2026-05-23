@@ -1,0 +1,25 @@
+-- Criar tabela Pedidos
+CREATE TABLE IF NOT EXISTS pedidos (
+    pedido_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome_cliente VARCHAR(255) NOT NULL,
+    cpf_cliente VARCHAR(11) NOT NULL,
+    preco_total DECIMAL(10, 2) NOT NULL CHECK (preco_total >= 0),
+    idempotency_key VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+select * from pedidos;
+
+
+CREATE TABLE IF NOT EXISTS outbox_messages (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    event_type VARCHAR(255) NOT NULL,
+    payload JSONB NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    processed_at TIMESTAMP NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+    retry_count INT NOT NULL DEFAULT 0,
+    error_message TEXT NULL
+);
+
+select * from outbox_messages;
