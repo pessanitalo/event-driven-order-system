@@ -1,0 +1,11 @@
+apiVersion: 1
+contactPoints:
+    - orgId: 1
+      name: Alert
+      receivers:
+        - uid: efogm65qc7pc0d
+          type: email
+          settings:
+            addresses: italopessan@gmail.com
+            singleEmail: false
+          disableResolveMessage: false
