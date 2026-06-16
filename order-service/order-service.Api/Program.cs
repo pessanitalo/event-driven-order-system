@@ -1,59 +1,26 @@
-using Npgsql;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Trace;
-using order_service.Application.Pedido.UseCases;
-using order_service.Domain.Repositories;
+using order_service.Api.Middleware;
+using order_service.Application;
 using order_service.Infrastructure.DependencyInjection;
-using order_service.Infrastructure.MessageBroker;
-using order_service.Infrastructure.Persistence.Repository;
-using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.Logging.AddFilter("OpenTelemetry", LogLevel.Debug);
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ICriarPedidoUseCase, CriarPedidoUseCase>();
-builder.Services.AddScoped<ICriarPedidoUseCase, CriarPedidoUseCase>();
-builder.Services.AddScoped<IBuscarPedidosUseCase, BuscarPedidosUseCase>();
-builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
-builder.Services.AddScoped<IOutboxMessagesRepository, OutboxMessagesRepository>();
-
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
-
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddObservability();
 builder.Services.AddRabbitMq(builder.Configuration);
-builder.Services.AddHostedService<OutboxPublisherWorker>();
 
-builder.Services.AddSingleton<IMessagePublisher, RabbitMqPublisher>();
-
-builder.Services.AddOpenTelemetry()
-    .WithMetrics(metrics =>
-    {
-        metrics
-            .AddAspNetCoreInstrumentation()
-            .AddRuntimeInstrumentation()
-            .AddProcessInstrumentation()
-            .AddNpgsqlInstrumentation()
-            .AddPrometheusExporter();
-    })
-    .WithTracing(tracing =>
-    {
-        tracing
-            .AddAspNetCoreInstrumentation()
-            .AddSource("Npgsql")
-                  .AddOtlpExporter(otlp =>
-                  {
-                      otlp.Endpoint = new Uri("http://host.docker.internal:4317");
-                      otlp.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
-                  }); ;
-    });
+AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
